@@ -1,0 +1,34 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors'); // Add this line
+const connectDB = require('./Config/dbConnection');
+const notFoundMiddleware = require('./Middleware/notFoundHandler');
+const app = express();
+const dotenv = require("dotenv").config();
+const expressasyncerrors = require('express-async-errors');
+const errorHandlerMiddleware = require('./Middleware/errorHandler');
+const port = process.env.PORT;
+
+connectDB();
+
+// Middlware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
+console.log("Starting Project")
+
+app.use("/api/login", require("./Routes/authRoute"));
+app.use("/", require("./Routes/authRoute"));
+app.use("/api/register", require("./Routes/authRoute"));
+
+app.use("/api/user", require("./Routes/userRoute"));
+
+app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleware);
+
+
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+});
