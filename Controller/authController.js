@@ -1,4 +1,5 @@
 const users = require("../Models/userModel")
+const { StatusCodes } = require('http-status-codes');
 
 // @desc: authenticate user
 // @route: POST /login

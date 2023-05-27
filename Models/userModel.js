@@ -3,13 +3,36 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 
+// For Validation
+const validator = require('validator');
 
 //Define the User schema
 const userSchema = new mongoose.Schema({
-    userName: { type: String, required: true },
-    // userNumber: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true, select: false }
+    username: {
+        type: String,
+        required: [true, 'Please Provide username. FOR MAHADI: username might be missing in React request or named dfferently']
+    },
+    usernumber: {
+        type: String,
+        required: [true, 'Please Provide usernumber. FOR MAHADI: usernumber might be missing in React request or named dfferently'],
+        unique: true,
+        minlength: 11,
+        maxlength: 15
+    },
+    email: {
+        type: String,
+        required: [true, 'Please Provide email. FOR MAHADI: email might be missing in React request or named differently'],
+        unique: true,
+        validate: {
+            validator: validator.isEmail,
+            message: 'Please provide a valid email'
+        }
+    },
+    password: {
+        type: String,
+        required: [true, 'Please Provide password. FOR MAHADI: Password might be missing in React request or named dfferently'],
+        select: false
+    }
 },
     {
         timestamps: true
