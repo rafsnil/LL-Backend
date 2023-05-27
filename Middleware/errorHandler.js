@@ -1,7 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-    console.log("There was an error");
+    // console.log("There was an error");
+    console.log(err);
     const defaultError = {
         statusCodes: StatusCodes.INTERNAL_SERVER_ERROR,
         message: "Something went wrong, and you and I, we both don't know what it is"

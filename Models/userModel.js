@@ -10,18 +10,18 @@ const validator = require('validator');
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: [true, 'Please Provide username. FOR MAHADI: username might be missing in React request or named dfferently']
+        required: [true, 'Please Provide username. Username might be missing in React request or named dfferently']
     },
     usernumber: {
         type: String,
-        required: [true, 'Please Provide usernumber. FOR MAHADI: usernumber might be missing in React request or named dfferently'],
+        required: [true, 'Please Provide usernumber.Usernumber might be missing in React request or named dfferently'],
         unique: true,
         minlength: 11,
         maxlength: 15
     },
     email: {
         type: String,
-        required: [true, 'Please Provide email. FOR MAHADI: email might be missing in React request or named differently'],
+        required: [true, 'Please Provide email. Email might be missing in React request or named differently'],
         unique: true,
         validate: {
             validator: validator.isEmail,
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please Provide password. FOR MAHADI: Password might be missing in React request or named dfferently'],
+        required: [true, 'Please Provide password. Password might be missing in React request or named dfferently'],
         select: false
     }
 },

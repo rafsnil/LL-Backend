@@ -14,7 +14,7 @@ const loginUser = async (req, res) => {
     }
 
     // Check if the email and password are correct (dummy check in this example)
-    if (email !== 'niloy@lovetitties.com' || password !== 'password') {
+    if (email !== 'boka@boka.com' || password !== '1234') {
         return res.status(401).json({ error: 'Invalid credentials.' });
     }
 
