@@ -1,9 +1,10 @@
 const users = require("../Models/userModel")
 const { StatusCodes } = require('http-status-codes');
-
+const { BadRequestError } = require("../Errors/index");
 // @desc: authenticate user
 // @route: POST /login
 // @access: public
+
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -14,7 +15,7 @@ const loginUser = async (req, res) => {
     }
 
     // Check if the email and password are correct (dummy check in this example)
-    if (email !== 'boka@boka.com' || password !== '1234') {
+    if (email !== 'niloy@niloy.com' || password !== 'niloy') {
         return res.status(401).json({ error: 'Invalid credentials.' });
     }
 
@@ -26,7 +27,12 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res, next) => {
 
-    const user = await users.create(req.body);
+    const { username, usernumber, email, password } = req.body;
+    if (!username || !usernumber || !email || !password) {
+        throw new BadRequestError("Please fill up all the boxes");
+    }
+
+    const user = await users.create(username, usernumber, email, password);
     const jwtToken = user.createJWT();
     res.status(201).json({ user: { userName: user.userName, email: user.email }, jwtToken, message: 'User Registered Successfully' })
     // console.log(req.body)

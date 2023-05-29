@@ -8,6 +8,7 @@ const dotenv = require("dotenv").config();
 const expressasyncerrors = require('express-async-errors');
 const errorHandlerMiddleware = require('./Middleware/errorHandler');
 const port = process.env.PORT;
+const morgan = require('morgan');
 
 connectDB();
 
@@ -18,6 +19,10 @@ app.use(cors());
 app.use(express.json());
 
 console.log("Starting Project")
+
+if (process.env.NODE_ENV !== 'production') {
+    app.use(morgan('dev'))
+}
 
 app.use("/api/login", require("./Routes/authRoute"));
 app.use("/", require("./Routes/authRoute"));
