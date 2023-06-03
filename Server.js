@@ -9,14 +9,16 @@ const expressasyncerrors = require('express-async-errors');
 const errorHandlerMiddleware = require('./Middleware/errorHandler');
 const port = process.env.PORT;
 const morgan = require('morgan');
+// const upload = require('./Middleware/multerforimageupload');
 
 connectDB();
 
 // Middlware
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
+// app.use(upload.any());
 
 console.log("Starting Project")
 
@@ -32,6 +34,7 @@ app.use("/api/user", require("./Routes/userRoute"));
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
+
 
 
 app.listen(port, () => {

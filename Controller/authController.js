@@ -1,9 +1,14 @@
 const users = require("../Models/userModel")
+const tutors = require("../Models/tutorModel")
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, UnauthorizedError } = require("../Errors/index");
+const upload = require('../Middleware/multerforimageupload');
+const fs = require('fs');
 // @desc: authenticate user
 // @route: POST /login
 // @access: public
+
+
 
 
 const loginUser = async (req, res) => {
@@ -50,13 +55,76 @@ const registerUser = async (req, res, next) => {
     console.log(req.body)
 }
 
+
+
+const registerTutor = async (req, res, next) => {
+    console.log("Tutor reg form incoming");
+    // console.log(req.body);
+    // console.log(req.files);
+    const { name, phonenumber, email, password } = req.body;
+
+    if (!name || !phonenumber || !email || !password) {
+        throw new BadRequestError("Please fill up all the boxes");
+    }
+
+    const picture = req.files.find(file => file.fieldname === 'picture').filename;
+
+
+    // console.log(picture);
+    // Handle certificates upload
+    const certificates = req.files
+        .filter(file => file.fieldname.startsWith('certificates'))
+        .map(file => file.filename);
+
+    // console.log(certificates)
+    try {
+        // Create a new tutor document
+        const newTutor = new tutors({
+            name,
+            phonenumber,
+            email,
+            password,
+            picture,
+            certificates,
+        });
+
+        // Save the tutor document to the database
+        await newTutor.save();
+
+        // Return a success response
+        res.status(StatusCodes.CREATED).json({ message: "Tutor created successfully" });
+    } catch (error) {
+        // Handle any errors that occur during saving the tutor document
+        if (picture) {
+            deleteFile(picture); // Delete picture file
+        }
+
+        if (certificates && certificates.length > 0) {
+            certificates.forEach(filename => deleteFile(filename)); // Delete certificates files
+        }
+        throw new BadRequestError("Failed to create tutor");
+    }
+};
+const deleteFile = (filename) => {
+    fs.unlink(`uploads/${filename}`, (error) => {
+        if (error) {
+            console.log(`Failed to delete file: ${filename}`, error);
+        } else {
+            console.log(`Deleted file: ${filename}`);
+        }
+    });
+};
+
+
+
+
 const micTeshting123 = (req, res) => {
 
     res.status(200).json({ message: `Tik mato coltaci bai, 10shon kairan na` });
 
 }
 
-module.exports = { loginUser, micTeshting123, registerUser };
+module.exports = { loginUser, micTeshting123, registerUser, registerTutor };
 
 
 // const registerUser = async (req, res, next) => {
@@ -69,3 +137,39 @@ module.exports = { loginUser, micTeshting123, registerUser };
 //         next(error);
 //     }
 // }
+
+
+
+// Upload multiple certificate files
+        // upload.array('certificates', 8)(req, res, async (err) => {
+        //     if (err) {
+        //         throw new BadRequestError("Error uploading certificates");
+        //     }
+
+        //     // Access the uploaded certificate files using req.files
+        //     const certificates = req.files;
+        //     console.log(certificates);
+
+        //     try {
+        //         const tutor = await tutors.create({
+        //             name,
+        //             phonenumber,
+        //             email,
+        //             password,
+        //             picture: picture.filename, // Store the picture filename in the database
+        //             certificates: certificates.map(file => file.filename) // Store an array of certificate filenames in the database
+        //         });
+
+        //         res.status(StatusCodes.CREATED).json({
+        //             user: {
+        //                 name: tutor.name,
+        //                 phonenumber: tutor.phonenumber,
+        //                 email: tutor.email,
+        //             },
+        //             message: "User Registered Successfully",
+        //         });
+        //     } catch (error) {
+        //         // Handle database or other errors
+        //         next(error);
+        //     }
+        // });
