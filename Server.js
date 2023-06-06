@@ -10,6 +10,7 @@ const errorHandlerMiddleware = require('./Middleware/errorHandler');
 const port = process.env.PORT;
 const morgan = require('morgan');
 // const upload = require('./Middleware/multerforimageupload');
+const authenticateUserHandler = require('./Middleware/authenticateUserHandler');
 
 connectDB();
 
@@ -30,7 +31,7 @@ app.use("/api/login", require("./Routes/authRoute"));
 app.use("/", require("./Routes/authRoute"));
 app.use("/api/register", require("./Routes/authRoute"));
 
-app.use("/api/user", require("./Routes/userRoute"));
+app.use("/api/user", authenticateUserHandler, require("./Routes/userRoute"));
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);

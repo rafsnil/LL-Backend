@@ -3,7 +3,6 @@ const router = express.Router();
 const { loginUser, micTeshting123, registerUser, registerTutor } = require('../Controller/authController');
 const upload = require('../Middleware/multerforimageupload');
 
-
 // Route for sign-in
 router.route('/').get(micTeshting123);
 router.route('/api/login').post(loginUser);

@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
     if (!user) {
         throw new UnauthorizedError("User doesn't exist. Please Register First");
     }
-    console.log(user);
+    // console.log(user);
 
     const isPasswordCorrect = await user.comparePassword(password)
 
@@ -32,12 +32,17 @@ const loginUser = async (req, res) => {
         throw new UnauthorizedError('Incorrect Password');
     }
 
-    // Check if the email and password are correct (dummy check in this example)
+    const token = user.createJWT();
+    user.password = undefined; //To hide the password from being sent to the frontend
+    res.status(StatusCodes.OK).json({
+        user,
+        token,
+    });
 
     // Sign-in successful
-    const username = user.username;
-    const welcomeMessage = `Welcome, ${username}!`;
-    return res.json({ message: welcomeMessage });
+    // const username = user.username;
+    // const welcomeMessage = `Welcome, ${username}!`;
+    // return res.json({ message: welcomeMessage });
 }
 
 
@@ -50,8 +55,16 @@ const registerUser = async (req, res, next) => {
     }
 
     const user = await users.create({ username, usernumber, email, password });
-    const jwtToken = user.createJWT();
-    res.status(201).json({ user: { username: user.username, usernumber: user.usernumber, email: user.email }, jwtToken, message: 'User Registered Successfully' })
+    const token = user.createJWT();
+    res.status(StatusCodes.CREATED).json({
+        user: {
+            username: user.username,
+            usernumber: user.usernumber,
+            email: user.email
+        },
+        token,
+        message: 'User Registered Successfully'
+    })
     console.log(req.body)
 }
 
