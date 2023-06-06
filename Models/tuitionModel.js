@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 //  phonenumber, institution, classtype, subjects, location, salary, description
 // Define the Tuition schema
-const tuitionSchema = new mongoose.Schema({
+const tuitionsSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

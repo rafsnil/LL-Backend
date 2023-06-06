@@ -18,4 +18,4 @@ const showStatsOfTutor = async (req, res) => {
     res.send('')
 }
 
-modules.export = { createTutor, deleteTutor, getAllTutor, updateTutor, showStatsOfTutor };
+module.exports = { createTutor, deleteTutor, getAllTutor, updateTutor, showStatsOfTutor };
