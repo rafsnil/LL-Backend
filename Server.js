@@ -30,6 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use("/api/login", require("./Routes/authRoute"));
 app.use("/", require("./Routes/authRoute"));
 app.use("/api/register", require("./Routes/authRoute"));
+app.use("/api/tuitions", require("./Routes/tuitionRoute")); //tuition route added
 
 app.use("/api/user", authenticateUserHandler, require("./Routes/userRoute"));
 

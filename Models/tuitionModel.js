@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 //  phonenumber, institution, classtype, subjects, location, salary, description
 // Define the Tuition schema
 const tuitionsSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    // userId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
     phonenumber: {
         type: String,
         required: [true, 'Phonenumber might be missing in REACT request or named dfferently']
