@@ -1,6 +1,7 @@
 const tuitions = require("../Models/tuitionModel");
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, UnauthorizedError } = require("../Errors/index");
+const mongoose = require('mongoose');
 
 const createTuition = async (req, res) => {
     const { phonenumber, institution, classtype, subjects, location, salary, description } = req.body;
@@ -20,8 +21,22 @@ const createTuition = async (req, res) => {
 }
 
 const deleteTuition = async (req, res) => {
-    res.send('')
+    const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({error: 'No such tuition'})
+  }
+
+  const tuition = await tuitions.findOneAndDelete({_id: id})
+
+  if(!tuition) {
+    return res.status(400).json({error: 'No such tuition'})
+  }
+
+  res.status(200).json( tuition )
 }
+
+
 
 const getAllTuition = async (req, res) => {
     const tuition = await tuitions.find({}).sort({createdAt: -1})
@@ -37,5 +52,4 @@ const showStatsOfTuition = async (req, res) => {
     res.send('')
 }
 
-// modules.export = { createTuition, deleteTuition, getAllTuition, updateTuition, showStatsOfTuition };
-module.exports = { createTuition, getAllTuition };
+module.exports = { createTuition, getAllTuition, deleteTuition };
