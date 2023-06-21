@@ -32,6 +32,7 @@ app.use("/", require("./Routes/authRoute"));
 app.use("/api/register", require("./Routes/authRoute"));
 
 app.use("/api/user", authenticateUserHandler, require("./Routes/userRoute"));
+app.use("/api/tutor", require("./Routes/userRoute"));
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);

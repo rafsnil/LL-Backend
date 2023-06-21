@@ -128,6 +128,40 @@ const deleteFile = (filename) => {
     });
 };
 
+// TUTOR LOGIN
+const loginTutor = async (req, res) => {
+    const { email, password } = req.body;
+
+    // Perform validation on the email and password
+    if (!email || !password) {
+        throw new BadRequestError('Please Provide All Values');
+    }
+
+    const tutor = await tutors.findOne({ email }).select('+password');
+
+    if (!tutor) {
+        throw new UnauthorizedError("User doesn't exist. Please Register First");
+    }
+    // console.log(tutor);
+
+    const isPasswordCorrect = await tutor.comparePassword(password)
+
+    if (!isPasswordCorrect) {
+        throw new UnauthorizedError('Incorrect Password');
+    }
+
+    const token = tutor.createJWT();
+    tutor.password = undefined; //To hide the password from being sent to the frontend
+    res.status(StatusCodes.OK).json({
+        tutor,
+        token,
+    });
+
+    // Sign-in successful
+    // const username = user.username;
+    // const welcomeMessage = `Welcome, ${username}!`;
+    // return res.json({ message: welcomeMessage });
+}
 
 
 
@@ -137,7 +171,7 @@ const micTeshting123 = (req, res) => {
 
 }
 
-module.exports = { loginUser, micTeshting123, registerUser, registerTutor };
+module.exports = { loginUser, micTeshting123, registerUser, registerTutor, loginTutor };
 
 
 // const registerUser = async (req, res, next) => {
