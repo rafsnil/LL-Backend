@@ -9,10 +9,14 @@ const createTuition = async (req, res) => {
         throw new BadRequestError("Please Provide All Values");
     }
 
-    req.body.userId = req.user.userID;
-
-    const tuition = await tuitions.create(req.body)
-    res.status(StatusCodes.CREATED).json({ tuition });
+    // req.body.userId = req.user.userID;
+    try{
+        const tuition = await tuitions.create({ phonenumber, institution, classtype, subjects, location, salary, description })
+    res.status(StatusCodes.CREATED).json( tuition );
+    } catch (error){
+        res.status(400).json({ error: error.message })
+    }
+    
 }
 
 const deleteTuition = async (req, res) => {
@@ -20,7 +24,9 @@ const deleteTuition = async (req, res) => {
 }
 
 const getAllTuition = async (req, res) => {
-    res.send('')
+    const tuition = await tuitions.find({}).sort({createdAt: -1})
+
+    res.status(200).json( tuition )
 }
 
 const updateTuition = async (req, res) => {
@@ -32,4 +38,4 @@ const showStatsOfTuition = async (req, res) => {
 }
 
 // modules.export = { createTuition, deleteTuition, getAllTuition, updateTuition, showStatsOfTuition };
-module.exports = { createTuition };
+module.exports = { createTuition, getAllTuition };
