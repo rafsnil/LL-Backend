@@ -12,7 +12,8 @@ const createTuition = async (req, res) => {
 
     // req.body.userId = req.user.userID;
     try{
-        const tuition = await tuitions.create({ phonenumber, institution, classtype, subjects, location, salary, description })
+        const user_id = req._id
+        const tuition = await tuitions.create({ phonenumber, institution, classtype, subjects, location, salary, description, user_id })
     res.status(StatusCodes.CREATED).json( tuition );
     } catch (error){
         res.status(400).json({ error: error.message })
@@ -39,7 +40,9 @@ const deleteTuition = async (req, res) => {
 
 
 const getAllTuition = async (req, res) => {
-    const tuition = await tuitions.find({}).sort({createdAt: -1})
+
+    const user_id = req.user._id
+    const tuition = await tuitions.find({user_id}).sort({createdAt: -1})
 
     res.status(200).json( tuition )
 }

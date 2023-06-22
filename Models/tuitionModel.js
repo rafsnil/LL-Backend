@@ -39,9 +39,9 @@ const tuitionsSchema = new mongoose.Schema({
         required: [true, 'Description might be missing in REACT request or named dfferently']
 
     },
-    tutorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tutor'
+    userId: {
+        type: String,
+        required: true
     }
 },
     {

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require("../Errors/index");
 
-const auth = async (req, res, next) => {
+const authenticateUserHandler = async (req, res, next) => {
     // const headers = req.headers;
     // const authHeader = req.headers.authorization;
     // console.log(headers)
@@ -17,9 +17,9 @@ const auth = async (req, res, next) => {
 
     try {
 
-        const payload = jwt.verify(token, process.env.JWT_SECRET)
+        const {_id} = jwt.verify(token, process.env.JWT_SECRET)
         // console.log(payload);
-        req.user = { userID: payload.userID };
+        req.user = await User.findOne({ _id }).select('_id')
         console.log(req.user)
         next()
 
@@ -30,5 +30,5 @@ const auth = async (req, res, next) => {
 
 }
 
-module.exports = auth;
+module.exports = authenticateUserHandler;
 
