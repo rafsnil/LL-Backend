@@ -32,7 +32,8 @@ app.use("/", require("./Routes/authRoute"));
 app.use("/api/register", require("./Routes/authRoute"));
 app.use("/api/tuitions", require("./Routes/tuitionRoute")); //tuition route added
 
-app.use("/api/user", authenticateUserHandler, require("./Routes/userRoute"));
+// app.use("/api/user", authenticateUserHandler, require("./Routes/userRoute"));
+app.use("/api/user", require("./Routes/userRoute"));
 app.use("/api/tutor", require("./Routes/userRoute"));
 
 app.use(errorHandlerMiddleware);
